@@ -49,6 +49,6 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo Actions GH Ref ${GITHUB_REF##*/}
-          echo GITHUB_HEAD_REF: ${{ github.head_ref }}
-          echo GITHUB_BASE_REF: ${{ github.base_ref }}
+          echo GITHUB_HEAD_REF: ${{github.head_ref}}
+          echo GITHUB_BASE_REF: ${{github.base_ref}}
           echo ${{github.ref}}
