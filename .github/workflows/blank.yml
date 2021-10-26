@@ -33,7 +33,7 @@ jobs:
          
       # Runs a set of commands using the runners shell
       - name: Run a master mode
-        if: endsWith(github.ref, '-rc') == 'false'
+        if: endsWith(github.ref, '-rc') == false
         run: |
           echo Actions GH Ref ${GITHUB_REF##*/}
           echo master
