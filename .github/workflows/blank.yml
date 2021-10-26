@@ -34,4 +34,5 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo Actions GH Ref ${GITHUB_REF##*/}
-          echo "::set-output name=image::image-test:${GITHUB_REF##*/}"
+          echo github.ref
+          echo "github.ref" + github.ref
