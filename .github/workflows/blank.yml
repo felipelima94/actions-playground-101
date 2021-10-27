@@ -49,4 +49,7 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo Actions GH Ref ${GITHUB_REF##*/}
+          echo event: ${{github.event}}
+          echo event_name: ${{github.event_name}}
+          echo event_path: ${{github.event_path}}
           echo ${{github.ref}}
