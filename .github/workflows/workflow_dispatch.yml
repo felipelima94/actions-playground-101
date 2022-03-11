@@ -1,0 +1,21 @@
+on: 
+  push:
+  release:
+  workflow_dispatch:
+    inputs:
+      tags:
+        description: 'Test scenario tags'
+        required: false 
+        type: boolean 
+
+jobs:
+  log-the-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Tags: $TAGS"
+          echo ${GITHUB_EVENT_NAME} GITHUB_EVENT_NAME
+          echo ${{ github.event_name }}
+
+        env:
+          TAGS: ${{ github.event.inputs.tags }}
