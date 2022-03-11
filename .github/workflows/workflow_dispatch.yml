@@ -12,10 +12,14 @@ jobs:
   log-the-inputs:
     runs-on: ubuntu-latest
     steps:
-      - run: |
+      - name: build
+        run: |
           echo "Tags: $TAGS"
           echo ${GITHUB_EVENT_NAME} GITHUB_EVENT_NAME
           echo ${{ github.event_name }}
-
+          echo "::set-output name=image::imagename"
         env:
           TAGS: ${{ github.event.inputs.tags }}
+      - run: |
+          echo "{{ steps.build.outputs.image }}"
+          echo ${{ steps.build.outputs.image }}
