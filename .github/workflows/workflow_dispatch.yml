@@ -1,4 +1,6 @@
 on: 
+  push:
+
   workflow_dispatch:
     inputs:
       tags:
@@ -12,5 +14,6 @@ jobs:
     steps:
       - run: |
           echo "Tags: $TAGS"
+          echo ${{ GITHUB_EVENT_NAME }}
         env:
           TAGS: ${{ github.event.inputs.tags }}
