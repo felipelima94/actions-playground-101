@@ -13,6 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: build
+        id: build
         env:
           TAGS: ${{ github.event.inputs.tags }}
           IMAGETAG: LATEST
@@ -21,6 +22,7 @@ jobs:
           echo ${GITHUB_EVENT_NAME} GITHUB_EVENT_NAME
           echo ${{ github.event_name }}
           echo "::set-output name=image::$IMAGETAG"
-      - run: |
+      - name: test
+        run: |
           echo "{{ steps.build.outputs.image }}"
           echo ${{ steps.build.outputs.image }}
