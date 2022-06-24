@@ -6,7 +6,8 @@ on:
     inputs:
       ECR_REPOSITORY: 
         required: false
-        default: "seuperrepore"
+        default: ${{ gen-tag.steps.set-image-tag.outputs.image }}
+        # jobs.image-tag.steps.set-image-tag.outputs.tag
         type: string
     secrets:
       ECR_REGISTRY: 
@@ -15,9 +16,6 @@ on:
         required: true
       SEGREDO: 
         required: true
-    outputs:
-      image-tag:
-        value: ${{ jobs.gen-tag.outputs.image }}
 
 
 jobs:
