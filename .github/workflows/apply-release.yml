@@ -6,7 +6,7 @@ on:
     inputs:
       ECR_REPOSITORY: 
         required: false
-        default: ${{ gen-tag.steps.set-image-tag.outputs.image }}
+        default: ${{ jobs.gen-tag.steps.set-image-tag.outputs.image }}
         # jobs.image-tag.steps.set-image-tag.outputs.tag
         type: string
     secrets:
@@ -56,6 +56,6 @@ jobs:
       id: outtage
       run: |
         echo "set image deployment/api api=${{ needs.gen-tag.outputs.image }} -n app-app"
-        echo "set image deployment/api api=$ECR_REGISTRY/${{ outputs.ECR_REPOSITORY }}:${GITHUB_REF##*/} -n app-app"
+        echo "set image deployment/api api=$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/} -n app-app"
         echo "Segredo: ${{ secrets.SEGREDO }}"
     
