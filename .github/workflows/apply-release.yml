@@ -12,7 +12,9 @@ jobs:
           with:
             access_token: ${{ github.token }}
   gen-tag:
-    name: gen tag
+    name: Gen tag
+    outputs:
+      image: ${{ steps.set-image-tag.outputs.image }}
     runs-on: ubuntu-latest
 
     steps:
@@ -31,9 +33,10 @@ jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
+    needs: gen-tag
     
     steps:
     - name: Out
       id: outtage
-      run: echo "set image deployment/api api=${{ jobs.gen-tag.steps.set-image-tag.outputs.image }} -n app-app"
+      run: echo "set image deployment/api api=${{ needs.gen-tag.outputs.image }} -n app-app"
     
