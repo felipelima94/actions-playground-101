@@ -32,6 +32,7 @@ jobs:
     outputs:
       image: ${{ steps.set-image-tag.outputs.image }}
       tag: ${{ steps.set-image-tag.outputs.tag }}
+      registry: ${{ steps.set-image-tag.outputs.registry }}
     runs-on: ubuntu-latest
 
     steps:
@@ -48,8 +49,10 @@ jobs:
         var1=$ECR_REGISTRY
         var2=$ECR_REPOSITORY
         echo "::add-mask::$ECR_REGISTRY"
+        REGISTRY_CRYPTO=$(gpg --symmetric --batch --passphrase "SECRET" --output - <(echo $ECR_REGISTRY) | base64 -w0)
         echo "::add-mask::$ECR_REPOSITORY"
-        echo "::set-output name=tag::$var1/$var2:${GITHUB_REF##*/}"
+        echo "::set-output name=registry::$REGISTRY_CRYPTO"
+        echo "::set-output name=tag::$REGISTRY_CRYPTO/$var2:${GITHUB_REF##*/}"
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/}"
     
   deploy:
@@ -61,6 +64,9 @@ jobs:
     - name: Out
       id: outtage
       run: |
+        encrypted_value=
+        decrypted_value=$(gpg --decrypt --quiet --batch --passphrase "SECRET" --output - <(echo "${{ needs.gen-tag.outputs.registry }}" | base64 --decode))
+        echo "run1 $decrypted_value"
         echo "espec1 set image deployment/api api=${{ needs.gen-tag.outputs.tag }} -n app-app"
         echo "espec2 set image deployment/api api=${{ needs.gen-tag.outputs.image }} -n app-app"
         echo "espec3 ${{ needs.gen-tag.outputs.image }}
