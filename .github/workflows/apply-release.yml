@@ -6,7 +6,7 @@ on:
     inputs:
       ECR_REPOSITORY: 
         required: false
-        default: ${{ jobs.gen-tag.outputs.image }}
+        default: "seuperrepore"
         type: string
     secrets:
       ECR_REGISTRY: 
