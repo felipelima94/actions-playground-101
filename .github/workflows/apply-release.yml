@@ -22,7 +22,7 @@ jobs:
     - name: Tagged image setup
       id: set-image-tag
       env:
-        ECR_REGISTRY: workRoll
+        ECR_REGISTRY: ${{ secrets.SEGREDO }}
         ECR_REPOSITORY: superrepo
       run: |
         # set image tag
