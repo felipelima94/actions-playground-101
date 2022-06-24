@@ -11,8 +11,8 @@ jobs:
           uses: styfle/cancel-workflow-action@0.9.0
           with:
             access_token: ${{ github.token }}
-  deploy:
-    name: Deploy
+  gen-tag:
+    name: gen tag
     runs-on: ubuntu-latest
 
     steps:
@@ -28,7 +28,12 @@ jobs:
         # set image tag
         echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/}"
     
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    
+    steps:
     - name: Out
       id: outtage
-      run: echo "set image deployment/api-04 api-04=${{ steps.set-image-tag.outputs.image }} -n app-app"
+      run: echo "set image deployment/api api=${{ jobs.gen-tag.steps.set-image-tag.outputs.image }} -n app-app"
     
