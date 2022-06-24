@@ -63,7 +63,7 @@ jobs:
       run: |
         echo "espec1 set image deployment/api api=${{ needs.gen-tag.outputs.tag }} -n app-app"
         echo "espec2 set image deployment/api api=${{ needs.gen-tag.outputs.image }} -n app-app"
-        echo "espec3 ${{ 
+        echo "espec3 ${{ needs.gen-tag.outputs.image }}
         echo "espec4 set image deployment/api api=$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/} -n app-app"
         echo "espec5 Segredo: ${{ secrets.SEGREDO }}"
     
