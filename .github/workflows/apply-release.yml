@@ -2,22 +2,6 @@ name: Release Azaras
 on:
   workflow_dispatch:
 
-  workflow_call:
-    inputs:
-      ECR_REPOSITORY: 
-        required: false
-        default: $secrets.SEGREDO
-        # jobs.image-tag.steps.set-image-tag.outputs.tag
-        type: string
-    secrets:
-      ECR_REGISTRY: 
-        required: true
-      ECR_REPOSITORY: 
-        required: true
-      SEGREDO: 
-        required: true
-
-
 jobs:
   cancel-previous:
       name: Cancel Previous Runs
@@ -30,9 +14,7 @@ jobs:
   gen-tag:
     name: Gen tag
     outputs:
-      image: ${{ steps.set-image-tag.outputs.image }}
-      tag: ${{ steps.set-image-tag.outputs.tag }}
-      registry: ${{ steps.set-image-tag.outputs.registry }}
+      image_crypto: ${{ steps.set-image-tag.outputs.image_crypto }}
     runs-on: ubuntu-latest
 
     steps:
@@ -45,16 +27,11 @@ jobs:
         ECR_REGISTRY: ${{ secrets.SEGREDO }}
         ECR_REPOSITORY: superrepo
       run: |
-        # set image tag
-        var1=$ECR_REGISTRY
-        var2=$ECR_REPOSITORY
-        echo "::add-mask::$ECR_REGISTRY"
-        REGISTRY_CRYPTO=$(gpg --symmetric --batch --passphrase "SECRET" --output - <(echo $ECR_REGISTRY) | base64 -w0)
-        echo "::add-mask::$ECR_REPOSITORY"
-        echo "::set-output name=registry::$REGISTRY_CRYPTO"
-        echo "::set-output name=tag::$REGISTRY_CRYPTO/$var2:${GITHUB_REF##*/}"
-        echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/}"
-    
+        # set image tag       
+        image_str="::add-mask::$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/}"
+        image_crypto=$(gpg --symmetric --batch --passphrase "SECRET" --output - <(echo $image_str) | base64 -w0)
+        echo "::set-output name=image_crypto::$image_crypto"
+
   deploy:
     name: deploy
     runs-on: ubuntu-latest
@@ -64,12 +41,6 @@ jobs:
     - name: Out
       id: outtage
       run: |
-        encrypted_value=
-        decrypted_value=$(gpg --decrypt --quiet --batch --passphrase "SECRET" --output - <(echo "${{ needs.gen-tag.outputs.registry }}" | base64 --decode))
-        echo "run1 $decrypted_value"
-        echo "espec1 set image deployment/api api=${{ needs.gen-tag.outputs.tag }} -n app-app"
-        echo "espec2 set image deployment/api api=${{ needs.gen-tag.outputs.image }} -n app-app"
-        echo "espec3 ${{ needs.gen-tag.outputs.image }}
-        echo "espec4 set image deployment/api api=$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/} -n app-app"
-        echo "espec5 Segredo: ${{ secrets.SEGREDO }}"
+        decrypted_value=$(gpg --decrypt --quiet --batch --passphrase "SECRET" --output - <(echo "${{ needs.gen-tag.outputs.image_crypto }}" | base64 --decode))
+        echo "$decrypted_value"
     
