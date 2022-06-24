@@ -6,7 +6,7 @@ on:
     inputs:
       ECR_REPOSITORY: 
         required: false
-        default: ${{ needs.gen-tag.outputs.image }}
+        default: $secrets.SEGREDO
         # jobs.image-tag.steps.set-image-tag.outputs.tag
         type: string
     secrets:
