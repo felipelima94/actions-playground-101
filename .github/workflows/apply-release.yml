@@ -2,6 +2,19 @@ name: Release Azaras
 on:
   workflow_dispatch:
 
+  workflow_call:
+    secrets:
+      ECR_REGISTRY: 
+        required: true
+      ECR_REPOSITORY: 
+        required: true
+      SEGREDO: 
+        required: true
+    outputs:
+      image-tag:
+        value: ${{ jobs.gen-tag.outputs.image }}
+
+
 jobs:
   cancel-previous:
       name: Cancel Previous Runs
@@ -34,9 +47,12 @@ jobs:
     name: deploy
     runs-on: ubuntu-latest
     needs: gen-tag
-    
+
     steps:
     - name: Out
       id: outtage
-      run: echo "set image deployment/api api=${{ needs.gen-tag.outputs.image }} -n app-app"
+      run: |
+        echo "set image deployment/api api=${{ needs.gen-tag.outputs.image }} -n app-app"
+        echo "set image deployment/api api=$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/} -n app-app"
+        echo "ameba: $SEGREDO"
     
