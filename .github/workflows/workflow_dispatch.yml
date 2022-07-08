@@ -7,6 +7,10 @@ on:
         description: 'Test scenario tags'
         required: false 
         type: boolean 
+      image:
+        description: 'image repo'
+        required: false
+        type: string
 
 jobs:
   log-the-inputs:
