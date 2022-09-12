@@ -1,0 +1,8 @@
+config:
+  jwtSecret: ${JWT_SECRET:83921jhdisahiuheas289312}
+  jwtExpirationMs: ${JWT_EXPIRATION_MS:3600000}
+  access_key_id: AKIAU7SET2K6BBRU6ZGZ
+  secret_access_key: KHEJNAEc5k6LJvdFAjvc/ABsaaCuJFrDm1234CHTp
+  github:
+    client-id: ${CLIENT_ID_GITHUB:92787921260735b4a3c5}
+    client-secret: ${CLIENT_SECRET_GITHUB:2615f40d96d306b6fcb141cc8c4a7c8be2d23ef2}
