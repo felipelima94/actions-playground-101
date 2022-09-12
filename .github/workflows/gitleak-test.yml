@@ -32,7 +32,6 @@ jobs:
           docker run -v $GITHUB_WORKSPACE/:/path zricethezav/gitleaks:latest detect -v --source="/path"
 
   comment:
-    needs: build
     runs-on: ubuntu-latest
     steps:
       - uses: mshick/add-pr-comment@v1
