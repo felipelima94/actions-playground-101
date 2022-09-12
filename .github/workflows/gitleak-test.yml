@@ -30,3 +30,15 @@ jobs:
         run: |
           echo Actions GH Ref ${GITHUB_REF##*/}
           docker run -v $GITHUB_WORKSPACE/:/path zricethezav/gitleaks:latest detect -v --source="/path"
+
+  comment:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: mshick/add-pr-comment@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          message: |
+            **Hello word**
+          allow-repeats: true
