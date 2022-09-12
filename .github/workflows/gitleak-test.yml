@@ -25,12 +25,26 @@ jobs:
           docker run -v $GITHUB_WORKSPACE/:/path zricethezav/gitleaks:latest detect -v --source="/path"
 
   comment:
+    needs: gitleak-test
     runs-on: ubuntu-latest
     steps:
-      - uses: mshick/add-pr-comment@v1
+
+      - name: success
+        if: success() && steps.gitleak-test.outcome == 'success'
+        uses: mshick/add-pr-comment@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           message: |
-            **Hello word**
-          allow-repeats: true
+            **No more issues found**
+          allow-repeats: false
+          
+      - name: failing
+        if: failure() && steps.gitleak-test.outcome == 'failure'
+        uses: mshick/add-pr-comment@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          message: |
+            **Some issues have been found**
+          allow-repeats: false
