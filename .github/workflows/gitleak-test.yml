@@ -24,11 +24,6 @@ jobs:
         run: |
           docker run -v $GITHUB_WORKSPACE/:/path zricethezav/gitleaks:latest detect -v --source="/path"
 
-  comment:
-    needs: gitleak-test
-    runs-on: ubuntu-latest
-    steps:
-
       - name: success
         if: success() && steps.gitleak-test.outcome == 'success'
         uses: mshick/add-pr-comment@v1
