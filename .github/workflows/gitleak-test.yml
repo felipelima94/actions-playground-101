@@ -29,5 +29,4 @@ jobs:
       - name: Run a multi-line script
         run: |
           echo Actions GH Ref ${GITHUB_REF##*/}
-          docker pull zricethezav/gitleaks:latest
           docker run -v $GITHUB_WORKSPACE/:/path zricethezav/gitleaks:latest detect -v --source="/path"
