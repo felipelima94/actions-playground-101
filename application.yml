@@ -1,6 +1,6 @@
 config:
   jwtSecret: ${JWT_SECRET:83921jhdisahiuheas289312}
-  jwtExpirationMs: ${JWT_EXPIRATION_MS:3600000}
+  jwtExpirationMs: ${JWT_EXPIRATION_MS:5600000}
   access_key_id: ${ACCESS_KEY_ID}
   secret_access_key: ${SECRET_ACCESS_KEY}
   github:
