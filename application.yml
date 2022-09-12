@@ -4,5 +4,5 @@ config:
   access_key_id: ${ACCESS_KEY_ID}
   secret_access_key: ${SECRET_ACCESS_KEY}
   github:
-    client-id: ${CLIENT_ID_GITHUB:92787921260735b4a3c5}
-    client-secret: ${CLIENT_SECRET_GITHUB:2615f40d96d306b6fcb141cc8c4a7c8be2d23ef2}
+    client-id: ${CLIENT_ID_GITHUB}
+    client-secret: ${CLIENT_SECRET_GITHUB}
