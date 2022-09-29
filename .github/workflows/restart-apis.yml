@@ -24,7 +24,7 @@ jobs:
     steps:
       - name: Restart Production
         id: restart-production-api
-        if: ${{env.api_selected}}
+        if: env.api_selected
         run: | 
           echo "restart production service"
           
@@ -32,8 +32,7 @@ jobs:
   restart-homologation:
     name: Restart Homologation
     runs-on: ubuntu-latest
-    env: 
-      api_selected: ${{github.event.inputs.homologation}}
+    if: github.event.inputs.homologation
     steps:
       - name: Restart Homologation
         id: restart-homologation-api
@@ -49,6 +48,6 @@ jobs:
     steps:
       - name: Restart Development
         id: restart-homologation-api
-        if: ${{env.api_selected}}
+        if: env.api_selected == 'true'
         run: | 
           echo "restart Development service"
