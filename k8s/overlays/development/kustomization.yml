@@ -3,7 +3,7 @@ namespace: demo
 
 images:
 - name: repo_vez/image-hq-ha
-  newTag: v0.0.20
+  newTag: v0.0.21
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
