@@ -1,0 +1,8 @@
+bases:
+  - ../../base
+
+namespace: demo
+
+images:
+  - name: repo_vez/image-hq-ha
+    newTag: ng0.1.0
