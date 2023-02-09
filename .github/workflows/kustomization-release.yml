@@ -20,7 +20,7 @@ jobs:
     env:
       ECR_REGISTRY: repo_vez
       ECR_REPOSITORY: image-hq-ha
-      github_token: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps :
 
       - name: checkout
