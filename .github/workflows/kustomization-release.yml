@@ -23,14 +23,12 @@ jobs:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps :
 
-      - name: checkout
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+        with:
+          ref: master
 
       - name: kustomize
         uses: imranismail/setup-kustomize@v2
-
-      - name : Checkout master
-        run : git checkout master
 
       - name : Update development
         run : |
