@@ -29,6 +29,9 @@ jobs:
       - name: kustomize
         uses: imranismail/setup-kustomize@v2
 
+      - name : Checkout master
+        run : git checkout master
+
       - name : Update development
         run : |
           cd k8s/overlays/development/
@@ -42,11 +45,9 @@ jobs:
         run : |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git checkout -b release-${{github.event.release.tag_name}}
           git add .
           git commit -m "Set image tag to ${{github.event.release.tag_name}}"
-          git push origin release-${GITHUB_REF##*/}
-          gh pr create -B master -H release-${GITHUB_REF##*/} --title 'Merge release-${{github.event.release.tag_name}} into master' --body 'Created by Github action'
+          git push
       
       # - name: Push changes
       #   uses: ad-m/github-push-action@master
