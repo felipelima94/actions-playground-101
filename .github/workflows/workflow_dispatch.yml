@@ -27,7 +27,7 @@ jobs:
           echo "image repo: $IMAGE_NAME"
           echo ${GITHUB_EVENT_NAME} GITHUB_EVENT_NAME
           echo ${{ github.event_name }}
-          echo "::set-output name=image::$IMAGETAG"
+          echo "::save-state name=image::$IMAGETAG"
       - name: test
         run: |
           echo "{{ steps.build.outputs.image }}"
