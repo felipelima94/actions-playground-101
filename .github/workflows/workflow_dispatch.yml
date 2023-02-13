@@ -15,6 +15,10 @@ on:
 jobs:
   log-the-inputs:
     runs-on: ubuntu-latest
+    outputs:
+      image: ${{ steps.set-text.outputs.image }}
+      espaco: ${{ steps.set-text.outputs.espaco }}
+
     steps:
       - name: build
         id: build
@@ -28,14 +32,15 @@ jobs:
           echo ${GITHUB_EVENT_NAME} GITHUB_EVENT_NAME
           echo ${{ github.event_name }}
       - name: Set output
+        id: set-text
         run: |
-          echo "image=TextoSemEspaco" >> $GITHUB_ENV
-          echo "espaco=Texto Com Espaco" >> $GITHUB_ENV
+          echo "image=TextoSemEspaco" >> $GITHUB_OUTPUT
+          echo "espaco=Texto Com Espaco" >> $GITHUB_OUTPUT
 
       - name: test
         run: |
-          echo ${{ env.image }}
-          echo ${{ env.espaco }}
+          echo ${{ steps.set-text.outputs.image }}
+          echo ${{ steps.set-text.outputs.espaco }}
   
   echo-outputs:
     runs-on: ubuntu-latest
@@ -43,5 +48,5 @@ jobs:
     steps:
       - name: test
         run: |
-          echo ${{ env.image }}
-          echo ${{ env.espaco }}
+          echo ${{ needs.log-the-inputs.outputs.image }}
+          echo ${{ needs.log-the-inputs.outputs.espaco }}
