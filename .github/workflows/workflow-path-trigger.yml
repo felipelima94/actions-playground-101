@@ -1,0 +1,14 @@
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'bug.md'
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Comment about changes we can't accept"
+        run: |
+          echo "Update file"
