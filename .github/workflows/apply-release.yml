@@ -75,6 +75,7 @@ jobs:
       run: |
         decrypted_value=$(gpg --decrypt --quiet --batch --passphrase "$SECRET" --output - <(echo "${{ needs.gen-tag.outputs.image_crypto }}" | base64 --decode))
         echo "Image: $decrypted_value"
+        echo "image=$decrypted_value" >> $GITHUB_OUTPUT
         
     - name: Build and push CONTAINER_NAME
       uses: ianbelcher/eks-kubectl-action@master
@@ -85,5 +86,5 @@ jobs:
         cluster_name: ${{ secrets.SEGREDO }}
         eks_role_arn: ${{ secrets.SEGREDO }}
         kubernetes_version: v1.21.0
-        args: set image --record deployment/pod-name pod-name=${{ env.SECRET }}
+        args: set image --record deployment/pod-name pod-name=${{ steps.outtage.outputs.image }}
      
