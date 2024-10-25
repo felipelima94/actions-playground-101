@@ -78,13 +78,5 @@ jobs:
         echo "image=$decrypted_value" >> $GITHUB_OUTPUT
         
     - name: Build and push CONTAINER_NAME
-      uses: ianbelcher/eks-kubectl-action@master
-      with:
-        aws_access_key_id: ${{ secrets.SEGREDO }}
-        aws_secret_access_key: ${{ secrets.SEGREDO }}
-        aws_region: ${{ secrets.SEGREDO }}
-        cluster_name: ${{ secrets.SEGREDO }}
-        eks_role_arn: ${{ secrets.SEGREDO }}
-        kubernetes_version: v1.21.0
-        args: set image --record deployment/pod-name pod-name=${{ steps.outtage.outputs.image }}
+      run: echo set image --record deployment/pod-name pod-name=${{ steps.outtage.outputs.image }}
      
