@@ -64,6 +64,8 @@ jobs:
     name: deploy_crypt
     runs-on: ubuntu-latest
     needs: gen-tag
+    env:
+      SECRET: decrypted_value=$(gpg --decrypt --quiet --batch --passphrase "$SECRET" --output - <(echo "${{ needs.gen-tag.outputs.image_crypto }}" | base64 --decode))
 
     steps:
     - name: Out
@@ -73,3 +75,15 @@ jobs:
       run: |
         decrypted_value=$(gpg --decrypt --quiet --batch --passphrase "$SECRET" --output - <(echo "${{ needs.gen-tag.outputs.image_crypto }}" | base64 --decode))
         echo "Image: $decrypted_value"
+        
+    - name: Build and push CONTAINER_NAME
+      uses: ianbelcher/eks-kubectl-action@master
+      with:
+        aws_access_key_id: ${{ secrets.SEGREDO }}
+        aws_secret_access_key: ${{ secrets.SEGREDO }}
+        aws_region: ${{ secrets.SEGREDO }}
+        cluster_name: ${{ secrets.SEGREDO }}
+        eks_role_arn: ${{ secrets.SEGREDO }}
+        kubernetes_version: v1.21.0
+        args: set image --record deployment/pod-name pod-name=$SECRET
+     
