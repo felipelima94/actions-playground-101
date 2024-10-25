@@ -14,6 +14,7 @@ jobs:
   gen-tag:
     name: Gen tag
     outputs:
+      image: ${{ steps.set-image-tag.outputs.image }}
       image_crypto: ${{ steps.set-image-tag.outputs.image_crypto }}
     runs-on: ubuntu-latest
 
@@ -30,12 +31,24 @@ jobs:
       run: |
         # set image tag    
         image="$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/}"
+        echo "image=$image" >> $GITHUB_OUTPUT
         image_str="::add-mask::$image"
         image_crypto=$(gpg --symmetric --batch --passphrase "$SECRET" --output - <(echo "$image") | base64 -w0)
-        echo "::set-output name=image_crypto::$image_crypto"
+        echo "image_crypto=$image_crypto" >> $GITHUB_OUTPUT
 
   deploy:
     name: deploy
+    runs-on: ubuntu-latest
+    needs: gen-tag
+
+    steps:
+    - name: Out
+      id: outtage
+      run: |
+        echo "${{ needs.gen-tag.outputs.image }}"
+    
+  deploy_crypt:
+    name: deploy_crypt
     runs-on: ubuntu-latest
     needs: gen-tag
 
@@ -47,4 +60,3 @@ jobs:
       run: |
         decrypted_value=$(gpg --decrypt --quiet --batch --passphrase "$SECRET" --output - <(echo "${{ needs.gen-tag.outputs.image_crypto }}" | base64 --decode))
         echo "Image: $decrypted_value"
-    
