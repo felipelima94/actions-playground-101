@@ -85,5 +85,5 @@ jobs:
         cluster_name: ${{ secrets.SEGREDO }}
         eks_role_arn: ${{ secrets.SEGREDO }}
         kubernetes_version: v1.21.0
-        args: set image --record deployment/pod-name pod-name=$SECRET
+        args: set image --record deployment/pod-name pod-name=${{ env.SECRET }}
      
