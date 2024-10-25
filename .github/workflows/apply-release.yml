@@ -75,6 +75,6 @@ jobs:
         echo "Image: $decrypted_value"
         echo "image=$decrypted_value" >> $GITHUB_OUTPUT
         
-    - name: Build and push CONTAINER_NAME
+    - name: set image
       run: echo set image --record deployment/pod-name pod-name=${{ steps.outtage.outputs.image }}
      
