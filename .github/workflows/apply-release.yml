@@ -64,9 +64,7 @@ jobs:
     name: deploy_crypt
     runs-on: ubuntu-latest
     needs: gen-tag
-    env:
-      SECRET: decrypted_value=$(gpg --decrypt --quiet --batch --passphrase "$SECRET" --output - <(echo "${{ needs.gen-tag.outputs.image_crypto }}" | base64 --decode))
-
+    
     steps:
     - name: Out
       id: outtage
