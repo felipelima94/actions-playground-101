@@ -27,6 +27,7 @@ jobs:
           IMAGE_NAME: ${{ github.event.inputs.image }}
           IMAGETAG: LATEST
         run: |
+          echo "Tag Selected: ${{  github.ref_name }}"
           echo "Tags: $TAGS"
           echo "image repo: $IMAGE_NAME"
           echo ${GITHUB_EVENT_NAME} GITHUB_EVENT_NAME
