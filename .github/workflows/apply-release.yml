@@ -34,6 +34,7 @@ jobs:
         image="$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/}"
         image_str="::add-mask::$image"
         image_crypto=$(gpg --symmetric --batch --passphrase "$SECRET" --output - <(echo "$image") | base64 -w0)
+        echo "Tag Selected: ${{  github.ref_name }}"
         echo "image=$image" >> $GITHUB_OUTPUT
         echo "image_mask=$image_str" >> $GITHUB_OUTPUT
         echo "image_crypto=$image_crypto" >> $GITHUB_OUTPUT
