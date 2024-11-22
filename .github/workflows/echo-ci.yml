@@ -18,8 +18,8 @@ jobs:
           echo ref_name: ${{ github.ref_name }}
           echo base_ref: ${{ github.base_ref }}
           echo head_ref: ${{ github.head_ref }}
-          # if [ $TAG = "V1" ]; then 
-          #     echo "Isso" 
-          # else 
-          #     echo "Não"
-          # fi
+          if [ ${{ github.ref_name }} = "development" ]; then 
+              echo "Isso" 
+          else 
+              echo "Não"
+          fi
