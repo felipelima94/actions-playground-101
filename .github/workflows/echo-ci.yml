@@ -19,12 +19,12 @@ jobs:
           echo base_ref: ${{ github.base_ref }}
           echo head_ref: ${{ github.head_ref }}
           if [ ${{ github.ref_name }} = "development" ]; then 
-              echo "image=ecr/image-dev:${{github.base_ref}}" >> $GITHUB_OUTPUT
+              echo "image=$(echo ecr/image-dev:${{github.base_ref}})" >> $GITHUB_OUTPUT
           else 
-              echo "image=ecr/image:${{github.base_ref}}" >> $GITHUB_OUTPUT
+              echo "image=$(echo ecr/image:${{github.base_ref}})" >> $GITHUB_OUTPUT
           fi
 
       - id: echo_i
-        name: First Run
+        name: Echo output
         run: |
           echo ${{ steps.run_run.outputs.image }}
