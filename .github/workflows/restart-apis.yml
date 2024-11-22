@@ -1,0 +1,53 @@
+name: Restart APIs
+on: 
+  workflow_dispatch:
+    inputs:
+      production:
+        description: 'Ambiente de produção'
+        required: false 
+        type: boolean 
+      homologation:
+        description: 'Ambiente de homologação'
+        required: false 
+        type: boolean 
+      development:
+        description: 'Ambiente de desenvolvimento'
+        required: false 
+        type: boolean 
+
+jobs:
+  restart-production:
+    name: Restart Production
+    runs-on: ubuntu-latest
+    if: github.event.inputs.production
+    steps:
+      - name: Restart Production
+        id: restart-production-api
+        run: | 
+          echo "restart production service"
+          
+
+  restart-homologation:
+    name: Restart Homologation
+    runs-on: ubuntu-latest
+    if: github.event.inputs.homologation == 'true'
+    steps:
+      - name: Restart Homologation
+        id: restart-homologation-api
+        run: | 
+          echo "restart Homologation service"
+          
+      - name: Restart Homologation
+        id: step2-homologation-api
+        run: | 
+          echo "step 2 Homologation service"
+
+  restart-development:
+    name: Restart Development
+    runs-on: ubuntu-latest
+    if: github.event.inputs.development == 'true'
+    steps:
+      - name: Restart Development
+        id: restart-homologation-api
+        run: | 
+          echo "restart Development service"

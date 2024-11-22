@@ -7,15 +7,50 @@ on:
         description: 'Test scenario tags'
         required: false 
         type: boolean 
-
+      image:
+        description: 'image repo'
+        required: false
+        type: string
+      environment:
+        description: 'Environment to run tests against'
+        type: environment
+        required: true
 jobs:
   log-the-inputs:
     runs-on: ubuntu-latest
-    steps:
-      - run: |
-          echo "Tags: $TAGS"
-          echo ${GITHUB_EVENT_NAME} GITHUB_EVENT_NAME
-          echo ${{ github.event_name }}
+    outputs:
+      image: ${{ steps.set-text.outputs.image }}
+      espaco: ${{ steps.set-text.outputs.espaco }}
 
+    steps:
+      - name: build
+        id: build
         env:
           TAGS: ${{ github.event.inputs.tags }}
+          IMAGE_NAME: ${{ github.event.inputs.image }}
+          IMAGETAG: LATEST
+        run: |
+          echo "Tag Selected: ${{  github.ref_name }}"
+          echo "Tags: $TAGS"
+          echo "image repo: $IMAGE_NAME"
+          echo ${GITHUB_EVENT_NAME} GITHUB_EVENT_NAME
+          echo ${{ github.event_name }}
+      - name: Set output
+        id: set-text
+        run: |
+          echo "image=TextoSemEspaco" >> $GITHUB_OUTPUT
+          echo "espaco=Texto Com Espaco" >> $GITHUB_OUTPUT
+
+      - name: test
+        run: |
+          echo ${{ steps.set-text.outputs.image }}
+          echo ${{ steps.set-text.outputs.espaco }}
+  
+  echo-outputs:
+    runs-on: ubuntu-latest
+    needs: log-the-inputs
+    steps:
+      - name: test
+        run: |
+          echo ${{ needs.log-the-inputs.outputs.image }}
+          echo ${{ needs.log-the-inputs.outputs.espaco }}

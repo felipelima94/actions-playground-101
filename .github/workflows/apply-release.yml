@@ -1,0 +1,80 @@
+name: Release Azaras
+on:
+  workflow_dispatch:
+
+jobs:
+  cancel-previous:
+      name: Cancel Previous Runs
+      runs-on: ubuntu-latest
+      steps:
+        - name: Cancel Previous Runs
+          uses: styfle/cancel-workflow-action@0.9.0
+          with:
+            access_token: ${{ github.token }}
+  gen-tag:
+    name: Gen tag
+    outputs:
+      image: ${{ steps.set-image-tag.outputs.image }}
+      image_mask: ${{ steps.set-image-tag.outputs.image_mask }}
+      image_crypto: ${{ steps.set-image-tag.outputs.image_crypto }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Tagged image setup
+      id: set-image-tag
+      env:
+        SECRET: ${{ secrets.SEGREDO }}
+        ECR_REGISTRY: ${{ secrets.SEGREDO }}
+        ECR_REPOSITORY: superrepo
+      run: |
+        # set image tag    
+        image="$ECR_REGISTRY/$ECR_REPOSITORY:${GITHUB_REF##*/}"
+        image_str="::add-mask::$image"
+        image_crypto=$(gpg --symmetric --batch --passphrase "$SECRET" --output - <(echo "$image") | base64 -w0)
+        echo "image=$image" >> $GITHUB_OUTPUT
+        echo "image_mask=$image_str" >> $GITHUB_OUTPUT
+        echo "image_crypto=$image_crypto" >> $GITHUB_OUTPUT
+
+  deploy:
+    name: deploy
+    runs-on: ubuntu-latest
+    needs: gen-tag
+
+    steps:
+    - name: Out
+      id: outtage
+      run: |
+        echo "${{ needs.gen-tag.outputs.image }}"
+    
+  deploy_mask:
+    name: deploy_mask
+    runs-on: ubuntu-latest
+    needs: gen-tag
+
+    steps:
+    - name: Out
+      id: outtage
+      run: |
+        echo "${{ needs.gen-tag.outputs.image_mask }}"
+    
+  deploy_crypt:
+    name: deploy_crypt
+    runs-on: ubuntu-latest
+    needs: gen-tag
+    
+    steps:
+    - name: Out
+      id: outtage
+      env:
+        SECRET: ${{ secrets.SEGREDO }}
+      run: |
+        decrypted_value=$(gpg --decrypt --quiet --batch --passphrase "$SECRET" --output - <(echo "${{ needs.gen-tag.outputs.image_crypto }}" | base64 --decode))
+        echo "Image: $decrypted_value"
+        echo "image=$decrypted_value" >> $GITHUB_OUTPUT
+        
+    - name: set image
+      run: echo set image --record deployment/pod-name pod-name=${{ steps.outtage.outputs.image }}
+     

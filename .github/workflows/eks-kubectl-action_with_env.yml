@@ -1,0 +1,36 @@
+name: eks-kubectl-action with env
+on:
+  workflow_dispatch:
+    inputs:
+      tag_version:
+        description: 'Input tag version'
+        required: true 
+        type: string 
+
+env:
+  NAMESPACE: ibm-current-conditions-api
+  
+jobs:
+  release-cronjob:
+    name: "Deploy cronjob"
+    runs-on: ubuntu-latest
+    env:
+      CRONJOB_NAME: client-ibm-current-conditions-api
+
+    steps:
+    - name: Get Image
+      id: get-image
+      env:
+        TAG: ${{ github.event.inputs.tag_version }}
+      run: |
+        echo "::set-output name=image_tag::felipelima94/cronjob:$TAG"
+
+    - name: Update image-tag from job
+      id: set-image-prod
+      uses: ianbelcher/eks-kubectl-action@master
+      with:
+        aws_access_key_id: AWS_ACCESS_KEY_ID
+        aws_secret_access_key: AWS_SECRET_ACCESS_KEY
+        aws_region: us-east-1
+        cluster_name: cluster_name_fic
+        args: set image cronjob/${{env.CRONJOB_NAME}} ${{env.CRONJOB_NAME}}=${{ steps.get-image.outputs.image_tag }} -n ${{env.NAMESPACE}}
